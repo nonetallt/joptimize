@@ -1,0 +1,32 @@
+{
+    "name": "nonetallt/joptimize",
+    "description": "Automatically optimize PHP methods based on results achieved by tweaking parameters ",
+    "keywords": ["php", "optimize", "methods"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jyri Mikkola",
+            "email": "jyri.mikkola@pp.inet.fi"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Nonetallt\\joptimize\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nonetallt\\joptomize\\JoptimizeServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    }
+}
