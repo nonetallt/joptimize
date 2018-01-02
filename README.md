@@ -1,6 +1,11 @@
 # joptimize
 Automatically optimize PHP execution time based on results achieved by tweaking parameters
 
+#Installation
+```
+composer require nonetallt/joptimize --dev
+```
+
 # Basic usage
 ```php
 $optimizer = new Joptimize();
