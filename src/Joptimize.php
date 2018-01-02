@@ -5,12 +5,14 @@ namespace Nonetallt\Joptimize;
 class Joptimize
 {
     private $params;
-    private $maxIterations;
+    private $notifier;
+    private $initializationValues;
 
-    public function __construct(int $maxIterations = null)
+    public function __construct(array $initializationValues = [])
     {
         $this->params = new JoptimizeParameters();
-        $this->maxIterations = $maxIterations;
+        $this->notifier = new JoptimizeNotifier();
+        $this->initializationValues = new NotifierInfo($initializationValues);
     }
 
     public function optimize(callable $cb)
@@ -22,25 +24,38 @@ class Joptimize
 
         foreach($this->params->getParameters() as $name => $param)
         {
-            $results[$name] = $this->optimizeParameter($cb, $param);   
+            $results[$name] = $this->optimizeParameter($cb, $param, $name);   
             $param->rewind();
         }
         
         return $results; 
     }
 
-    private function optimizeParameter(callable $cb, $param)
+    private function optimizeParameter(callable $cb, $param, string $name)
     {
         $bestTime = null;
         $bestValue= null;
 
         foreach($param as $key => $option)
         {
-            /* Get the correct iteration for range */
-            /* if(is_a($param, RangeParameter::class)) $key -= 2; */
+            $info = [
+                $key, 
+                $option, 
+                $param->maxIterations(),
+                $time ?? null,
+                $bestTime ?? null,
+                $name,
+                $bestValue ?? null
+            ];
+
+            /* First iteration */
+            if($key === 0) $this->notifier->firstIteration(...$info);
+
+            /* Notify iteration start */
+            $this->notifier->iterationStart(...$info);
 
             $time = $this->executionTime(function() use($cb, $key){
-                $cb($this->params, $key);
+                $cb($this->params, $key, $this->initializationValues);
             });
 
             if(is_null($bestTime) || $time < $bestTime)
@@ -48,6 +63,12 @@ class Joptimize
                 $bestTime = $time;
                 $bestValue = $option;
             }
+
+            /* Notify iteration completion */
+            $this->notifier->iterationEnd(...$info);
+
+            /* Last iteration */
+            if($param->maxIterations() === $key +1) $this->notifier->lastIteration(...$info);
         }
 
         return $bestValue;
@@ -59,6 +80,26 @@ class Joptimize
         $cb();
         $end = $this->time();
         return $end - $start;
+    }
+
+    public function onFirstIteration(callable $cb)
+    {
+        $this->notifier->setFirstIteration($cb);
+    }
+
+    public function onIterationStart(callable $cb)
+    {
+        $this->notifier->setIterationStart($cb);
+    }
+
+    public function onIterationEnd(callable $cb)
+    {
+        $this->notifier->setIterationEnd($cb);
+    }
+
+    public function onLastIteration(callable $cb)
+    {
+        $this->notifier->setLastIteration($cb);
     }
 
     /* Forward calls starting with 'define' to parameters object */

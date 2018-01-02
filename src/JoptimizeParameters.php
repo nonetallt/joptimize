@@ -21,18 +21,21 @@ class JoptimizeParameters
     {
         $parameter = new EnumParameter($args);
         $this->append($parameter);
+        return $parameter;
     }
 
     public function defineLinear(array $args)
     {
         $parameter = new LinearParameter($args);
         $this->append($parameter);
+        return $parameter;
     }
 
     public function defineRange(array $args)
     {
         $parameter = new RangeParameter($args);
         $this->append($parameter);
+        return $parameter;
     }
 
     public function append(JoptimizeParameter $param)

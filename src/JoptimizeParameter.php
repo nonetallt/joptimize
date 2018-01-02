@@ -62,5 +62,7 @@ abstract class JoptimizeParameter implements \Iterator
         return array_merge(['name' => 'string'], $this->requiredParameters());
     }
 
+    public abstract function maxIterations();
+
     protected abstract function requiredParameters();
 }

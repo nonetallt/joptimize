@@ -37,6 +37,11 @@ class LinearParameter extends JoptimizeParameter
         return $this->parameters[2] ?? 1;
     }
 
+    public function maxIterations()
+    {
+        return count($this->getValues());
+    }
+
     /* Use a lazy loader */
     public function getValues()
     {

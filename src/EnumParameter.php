@@ -20,6 +20,11 @@ class EnumParameter extends JoptimizeParameter
         return isset($this->parameters[$this->iteration]);
     }
 
+    public function maxIterations()
+    {
+        return count($this->parameters);
+    }
+
     protected function requiredParameters()
     {
         return [

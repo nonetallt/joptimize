@@ -86,9 +86,9 @@ class RangeParameter extends JoptimizeParameter
         return $this->parameters[1];
     }
 
-    private function maxIterations()
+    public function maxIterations()
     {
-        return $this->parameters[2] + 2;
+        return $this->parameters[2] + 3;
     }
 
     public function getValues()
