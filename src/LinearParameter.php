@@ -42,4 +42,12 @@ class LinearParameter extends JoptimizeParameter
     {
         return $this->values ?? range($this->min(), $this->max(), $this->stepSize());
     }
+
+    protected function requiredParameters()
+    {
+        return [
+            'start'    => 'integer|double',
+            'end'      => 'integer|double'
+        ];
+    }
 }

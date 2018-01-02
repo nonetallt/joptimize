@@ -15,18 +15,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Nonetallt\\joptimize\\": "src/"
+            "Nonetallt\\Joptimize\\": "src/"
         },
         "files": [
         ]
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Nonetallt\\joptomize\\JoptimizeServiceProvider"
-            ],
-            "aliases": {
-            }
-        }
     }
 }

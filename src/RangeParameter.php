@@ -95,4 +95,13 @@ class RangeParameter extends JoptimizeParameter
     {
         return $this->values;
     }
+
+    protected function requiredParameters()
+    {
+        return [
+            'min'           => 'integer|double',
+            'max'           => 'integer|double',
+            'maxIterations' => 'integer'
+        ];
+    }
 }

@@ -19,4 +19,10 @@ class EnumParameter extends JoptimizeParameter
     {
         return isset($this->parameters[$this->iteration]);
     }
+
+    protected function requiredParameters()
+    {
+        return [
+        ];
+    }
 }
