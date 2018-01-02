@@ -39,7 +39,7 @@ class Joptimize
         foreach($param as $key => $option)
         {
             $info = [
-                $key, 
+                $key +1, 
                 $option, 
                 $param->maxIterations(),
                 $time ?? null,
@@ -55,7 +55,7 @@ class Joptimize
             $this->notifier->iterationStart(...$info);
 
             $time = $this->executionTime(function() use($cb, $key){
-                $cb($this->params, $key, $this->initializationValues);
+                $cb($this->params, $key +1, $this->initializationValues);
             });
 
             /* Update info for time */
