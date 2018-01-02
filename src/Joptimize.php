@@ -58,10 +58,17 @@ class Joptimize
                 $cb($this->params, $key, $this->initializationValues);
             });
 
+            /* Update info for time */
+            $info[3] = $time;
+
             if(is_null($bestTime) || $time < $bestTime)
             {
                 $bestTime = $time;
                 $bestValue = $option;
+
+                /* Update info */ 
+                $info[4] = $bestTime;
+                $info[6] = $bestValue;
             }
 
             /* Notify iteration completion */
