@@ -1,5 +1,5 @@
 # joptimize
-Automatically optimize PHP execution time based on results achieved by tweaking parameters
+Automatically optimize PHP execution time based on results achieved by tweaking parameters. Can be integrated to a Laravel framework application with the [Laravel wrapper](https://github.com/nonetallt/joptimize).
 
 #Installation
 ```
