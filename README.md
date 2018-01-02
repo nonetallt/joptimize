@@ -58,12 +58,6 @@ methods:
 * onIterationEnd($callback)   called after each iteration
 * onLastIteration($callback)  called after last iteration
 
-The first argument passed to the notifier callback is the 'info' object, which
-contains information accessible in the iteration. All of the info variables
-might not be usable in all of the notify methods, for example, you cannot use the 'time'
-variable to log the execution time if the iteration has not been executed yet (onFirst
-and onStart methods).
-
 ```php
 $optimizer = new Joptimize();
 $optimizer->defineEnum('sleepTime', 1);
@@ -72,6 +66,20 @@ $optimizer->onFirstIteration(function($info) {
     echo $info->name; // 'sleepTime'
 });
 ```
+---
+The first argument passed to the notifier callback is the 'info' object, which
+contains information accessible in the iteration. All of the info variables
+might not be usable in all of the notify methods, for example, you cannot use the 'time'
+variable to log the execution time if the iteration has not been executed yet (onFirst
+and onStart methods).
+
+| Method           | name | iteration | totalIterations | value | bestValue | time | bestTime |
+|------------------|------|-----------|-----------------|-------|-----------|------|----------|
+| onFirstIteration | x    | x         | x               | x     | -         | -    | -        |
+| onIterationStart | x    | x         | x               | x     | -         | -    | -        |
+| onIterationEnd   | x    | x         | x               | x     | x         | x    | x        |
+| onLastIteration  | x    | x         | x               | x     | x         | x    | x        |
+---
 
 You may also save custom objects to the info container by calling the
 saveValue($name, $value) method. This can be useful if you wish to use some
