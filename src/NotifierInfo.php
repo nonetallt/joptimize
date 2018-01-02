@@ -16,7 +16,7 @@ class NotifierInfo
     public function __get($name)
     {
         $value = $this->values[$name] ?? $this->customValues[$name] ?? null;
-        if(is_null($value)) throw new \Exception("Undefined variable '$name'");
+        /* if(is_null($value)) throw new \Exception("Undefined variable '$name'"); */
         return $value;
     }
 

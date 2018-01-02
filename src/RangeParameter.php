@@ -16,7 +16,7 @@ class RangeParameter extends JoptimizeParameter
         $this->iteration = 0;
         $this->values = [];
         $this->set(0, $this->min());
-        $this->set(1, $this->max() / 2);
+        $this->set(1, $this->max() - ($this->max() - $this->min()) / 2);
         $this->set(2, $this->max());
         $this->times = [];
     }
@@ -32,6 +32,17 @@ class RangeParameter extends JoptimizeParameter
         $this->values[$iteration] = [ 'value' => $value, 'done' => $done ];
     }
 
+    private function lowerValue($currentValue)
+    {
+        return ($currentValue + $this->min()) / 2;
+    }
+
+    private function higherValue($currentValue)
+    {
+        return $this->max() - ($currentValue - $this->min()) / 2;
+        /* return $currentValue + ($this->max() - $currentValue) / 2; */
+    }
+
     public function current()
     {
         /* Create new values depending on execution time */
@@ -43,8 +54,8 @@ class RangeParameter extends JoptimizeParameter
                 $this->set(0, null, true);
                 $this->set(1, null, true);
                 $this->set(2, null, true);
-                $this->set(null, ($this->values[1]['value'] + $this->min()) / 2 );
-                $this->set(null, $this->values[1]['value'] / 2 + $this->values[1]['value']);
+                $this->set(null, $this->lowerValue($this->mid()));
+                $this->set(null, $this->higherValue($this->mid()));
             }
             else
             {
@@ -55,10 +66,13 @@ class RangeParameter extends JoptimizeParameter
                     /* Skip processed values */
                     if($value['done']) continue;
 
-                    /* Create new values from unprocessed ones and set them as processed */
-                    /* $newValues[] = $this->min() + ($value['value'] / 2); */
-                    $newValues[] = $value['value'] + ($this->min() - $value['value']) / 2;
-                    $newValues[] = $value['value'] + ($this->max() - $value['value']) / 2;
+                    /* Calculate the lower value */
+                    $newValues[] = $this->lowerValue($value['value']);
+
+                    /* Calculate the higher value */
+                    $newValues[] = $this->higherValue($value['value']);
+
+                    /* Set old values as processed */
                     $this->set($index, null, true);
                 }
                 foreach($newValues as $value)
@@ -73,12 +87,17 @@ class RangeParameter extends JoptimizeParameter
     public function valid()
     {
         /* Check if should stop trying to find better result */
-        return $this->iteration <= $this->maxIterations();
+        return $this->iteration < $this->maxIterations();
     }
 
     private function min()
     {
         return $this->parameters[0];
+    }
+
+    private function mid()
+    {
+        return $this->getValues()[1]['value'];
     }
 
     private function max()
@@ -88,7 +107,7 @@ class RangeParameter extends JoptimizeParameter
 
     public function maxIterations()
     {
-        return $this->parameters[2] + 3;
+        return $this->parameters[2];
     }
 
     public function getValues()
